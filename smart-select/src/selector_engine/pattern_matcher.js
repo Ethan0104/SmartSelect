@@ -4,9 +4,11 @@ import findMatches from './utils.js'
 function smartTextSelector(text, initialSelectionStart, initialSelectionEnd) {
     let start = initialSelectionStart
     let end = initialSelectionEnd
-    console.log("initial start end", initialSelectionStart, initialSelectionEnd)
+    console.log('initial start end', initialSelectionStart, initialSelectionEnd)
     for (const pattern of SELECT_PATTERNS) {
-        findMatches(pattern, text).forEach(match => {
+        findMatches(pattern, text).forEach((match) => {
+            console.log(text)
+            console.log(text.length)
             console.log(match)
             if (
                 match[0] <= initialSelectionStart &&
@@ -17,7 +19,7 @@ function smartTextSelector(text, initialSelectionStart, initialSelectionEnd) {
             }
         })
     }
-    console.log("new", start, end)
+    console.log('new', start, end)
     return { start, end }
 }
 

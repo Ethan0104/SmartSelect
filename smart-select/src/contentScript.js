@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         element = getNodeParentIfNotElementNode(element)
         selection.removeAllRanges()
 
-        let range = document.createRange()        
+        let range = document.createRange()
 
         let textNode = element.firstChild
         range.setStart(textNode, request.start)

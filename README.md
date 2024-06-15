@@ -15,6 +15,10 @@ My Chrome Extension
 
 Suggestions and pull requests are welcomed!.
 
+## Known Bugs
+
+In Gmail, when selecting the sender email address, it errors out because it's actually 3 elements that make up that email, not 1.
+
 ---
 
 This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
