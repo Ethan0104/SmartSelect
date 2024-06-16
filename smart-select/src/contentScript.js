@@ -5,7 +5,12 @@ document.addEventListener('dblclick', function (event) {
     let selection = window.getSelection()
     let range = selection.getRangeAt(0) // 0 is safe since the native behavior for double click is a single word
     let element = range.startContainer
-    console.log('Element:', element)
+    console.log('Element:', element, element.nodeType)
+
+    // Note: we assume that the element is always a text node
+    if (element.nodeType !== Node.TEXT_NODE) {
+        console.error(`Unexpected node type ${element.nodeType}, please reach out to support.`)
+    }
 
     element = getNodeParentIfNotElementNode(element)
 
