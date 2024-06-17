@@ -13,8 +13,8 @@ export function smartTextSelector(inlineText, startOffset, endOffset) {
             const matches = findMatches(pattern, inlineText)
             matches.forEach((match) => {
                 if (
-                    match[0] <= initialSelectionStart &&
-                    match[1] >= initialSelectionEnd
+                    match[0] <= startOffset &&
+                    match[1] >= endOffset
                 ) {
                     start = match[0]
                     end = match[1]

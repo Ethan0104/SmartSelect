@@ -1,7 +1,7 @@
 'use strict'
 
 import { smartTextSelector } from './selectorEngine/patternMatcher.js'
-import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './constants.js'
+import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './selectorEngine/constants.js'
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'processTextSelection') {
