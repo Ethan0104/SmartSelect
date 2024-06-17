@@ -6,15 +6,24 @@ import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './constants.js'
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'processTextSelection') {
         // find the pattern to be selected in the whole text first (treat the text as one chunk)
-        const { inlineText, serializedTextNodes, absoluteStartOffset, absoluteEndOffset } = request
+        const {
+            inlineText,
+            serializedTextNodes,
+            absoluteStartOffset,
+            absoluteEndOffset,
+        } = request
         let { matchStart, matchEnd } = smartTextSelector(
             inlineText,
             absoluteStartOffset,
-            absoluteEndOffset,
+            absoluteEndOffset
         )
 
         // check if the selection is the same as the previous selection
-        if (SKIP_IF_NO_CHANGE_IN_SELECTION && matchStart == absoluteStartOffset && matchEnd == absoluteEndOffset) {
+        if (
+            SKIP_IF_NO_CHANGE_IN_SELECTION &&
+            matchStart == absoluteStartOffset &&
+            matchEnd == absoluteEndOffset
+        ) {
             return
         }
 

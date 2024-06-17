@@ -5,23 +5,35 @@ import { getSurroundingInlineTextNodes } from './domUtils.js'
 let textNodesCache = null
 
 function parseDbClickSelectionGetSerializedTextNodeList(selection) {
-    const textNode = selection.anchorNode;
-    const startOffset = selection.anchorOffset;
-    const endOffset = selection.focusOffset;
+    const textNode = selection.anchorNode
+    const startOffset = selection.anchorOffset
+    const endOffset = selection.focusOffset
 
     // Note: we assume that the element is always a text node
     if (textNode.nodeType !== Node.TEXT_NODE) {
-        console.error(`Unexpected node type: ${textNode.nodeType}, please reach out to support.`)
+        console.error(
+            `Unexpected node type: ${textNode.nodeType}, please reach out to support.`
+        )
         return
     }
 
-    const { inlineText, textNodes, initialNodeIndex } = getSurroundingInlineTextNodes(textNode)
-    console.log('in: parseDbClickSelectionGetTextNodeList, inlineText', inlineText)
-    console.log('in: parseDbClickSelectionGetTextNodeList, textNodes', textNodes.length)
+    const { inlineText, textNodes, initialNodeIndex } =
+        getSurroundingInlineTextNodes(textNode)
+    console.log(
+        'in: parseDbClickSelectionGetTextNodeList, inlineText',
+        inlineText
+    )
+    console.log(
+        'in: parseDbClickSelectionGetTextNodeList, textNodes',
+        textNodes.length
+    )
     for (const node of textNodes) {
         console.log(node.nodeValue)
     }
-    console.log('in: parseDbClickSelectionGetTextNodeList, initialNodeIndex', initialNodeIndex)
+    console.log(
+        'in: parseDbClickSelectionGetTextNodeList, initialNodeIndex',
+        initialNodeIndex
+    )
 
     // while we have the context, we can also calculate the absolute start and end offsets
     let absoluteStartOffset = 0
@@ -40,8 +52,16 @@ function parseDbClickSelectionGetSerializedTextNodeList(selection) {
         }
     }
     absoluteEndOffset = absoluteStartOffset + (endOffset - startOffset)
-    console.log('in: parseDbClickSelectionGetTextNodeList, start', startOffset, absoluteStartOffset)
-    console.log('in: parseDbClickSelectionGetTextNodeList, end', endOffset, absoluteEndOffset)
+    console.log(
+        'in: parseDbClickSelectionGetTextNodeList, start',
+        startOffset,
+        absoluteStartOffset
+    )
+    console.log(
+        'in: parseDbClickSelectionGetTextNodeList, end',
+        endOffset,
+        absoluteEndOffset
+    )
 
     return { inlineText, textNodes, absoluteStartOffset, absoluteEndOffset }
 }
@@ -57,12 +77,8 @@ function getSerializedTextNodeList(textNodes) {
 
 document.addEventListener('dblclick', function (event) {
     const selection = window.getSelection()
-    const {
-        inlineText,
-        textNodes,
-        absoluteStartOffset,
-        absoluteEndOffset
-    } = parseDbClickSelectionGetSerializedTextNodeList(selection)
+    const { inlineText, textNodes, absoluteStartOffset, absoluteEndOffset } =
+        parseDbClickSelectionGetSerializedTextNodeList(selection)
     textNodesCache = textNodes
 
     // we need to serialize the text nodes because chrome.runtime.sendMessage does not support sending objects with functions
@@ -85,13 +101,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             firstMatchingTextNodeIndex,
             lastMatchingTextNodeIndex,
             matchStart,
-            matchEnd
+            matchEnd,
         } = request
         let selection = window.getSelection()
         selection.removeAllRanges()
 
         if (!textNodesCache) {
-            textNodesCache = parseDbClickSelectionGetSerializedTextNodeList(selection).textNodes
+            textNodesCache =
+                parseDbClickSelectionGetSerializedTextNodeList(
+                    selection
+                ).textNodes
         }
 
         // set up the Range object properly

@@ -4,10 +4,10 @@ import findMatches from './utils.js'
 export function smartTextSelector(inlineText, startOffset, endOffset) {
     console.log('in: smartTextSelector inlineText', inlineText)
     console.log('in: smartTextSelector offset', startOffset, endOffset)
-    let BreakException = {};
+    let BreakException = {}
     let start = startOffset
     let end = endOffset
-    
+
     try {
         for (const pattern of SELECT_PATTERNS) {
             const matches = findMatches(pattern, inlineText)
@@ -28,6 +28,6 @@ export function smartTextSelector(inlineText, startOffset, endOffset) {
 
     return {
         matchStart: start,
-        matchEnd: end
+        matchEnd: end,
     }
 }
