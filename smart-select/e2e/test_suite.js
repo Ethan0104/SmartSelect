@@ -18,6 +18,10 @@ const singlePatternTestSuite = (pattern) => {
             id: "patternSplitBetweenTwoElements",
             testContents: `<p>Hi, please select <b>${patternPart1}</b>${patternPart2} this thing here.</p>`,
         },
+        {
+            id: "doubleParentNesting",
+            testContents: `<p>Hi, please select <b><i>${patternPart1}</i></b>${patternPart2} this thing here.</p>`,
+        }
     ]
 }
 
