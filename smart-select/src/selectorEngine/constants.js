@@ -6,3 +6,6 @@ export const SELECT_PATTERNS = [
     // file paths
     /(?:\/|(?:\.\.?)?\/?)(?:[^\/\s]+\/)*(?:[^\/\s]+)/g,
 ]
+
+// this feature flag hides errors/bugs, so it should be on in prod but off in dev
+export const SKIP_IF_NO_CHANGE_IN_SELECTION = false

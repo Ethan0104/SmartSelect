@@ -1,6 +1,7 @@
 'use strict'
 
 import { smartTextSelector } from './selectorEngine/patternMatcher.js'
+import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './constants.js'
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'processTextSelection') {
@@ -11,6 +12,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             absoluteStartOffset,
             absoluteEndOffset,
         )
+
+        // check if the selection is the same as the previous selection
+        if (SKIP_IF_NO_CHANGE_IN_SELECTION && matchStart == absoluteStartOffset && matchEnd == absoluteEndOffset) {
+            return
+        }
 
         // Find the text nodes that contain the selection
         // but first we need to find the very first and last text node that contains the selection and record them
