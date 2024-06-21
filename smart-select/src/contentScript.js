@@ -118,5 +118,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         range.setStart(textNodesCache[firstMatchingTextNodeIndex], matchStart)
         range.setEnd(textNodesCache[lastMatchingTextNodeIndex], matchEnd)
         selection.addRange(range)
+
+        // Copy the selected text to the clipboard
+        const selectedText = selection.toString()
+        navigator.clipboard.writeText(selectedText)
+
+        // Show a toast message on the bottom left
+        const toast = document.createElement('div')
+        toast.className = 'smart-select-extension-toast-message'
+        toast.textContent = 'Selected text copied!'
+        document.body.appendChild(toast)
+        requestAnimationFrame(() => {
+            toast.classList.add('show')
+        })
+        setTimeout(() => {
+            toast.remove()
+        }, 2000)
     }
 })

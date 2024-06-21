@@ -21,7 +21,12 @@
         {
             "matches": ["<all_urls>"],
             "run_at": "document_idle",
-            "js": ["contentScript.js"]
+            "js": ["contentScript.js"],
+            "css": ["styles.css"]
         }
-    ]
+    ],
+    "web_accessible_resources": [{
+        "resources": ["icons/check.png"],
+        "matches": ["<all_urls>"]
+    }]
 }
