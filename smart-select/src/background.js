@@ -12,17 +12,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             absoluteStartOffset,
             absoluteEndOffset,
         } = request
-        let { matchStart, matchEnd } = smartTextSelector(
+        let { matchedStart, matchedEnd, matchedPattern } = smartTextSelector(
             inlineText,
             absoluteStartOffset,
             absoluteEndOffset
         )
 
+        // if no pattern is found, return
+        if (!matchedPattern) {
+            return
+        }
+
         // check if the selection is the same as the previous selection
         if (
             SKIP_IF_NO_CHANGE_IN_SELECTION &&
-            matchStart == absoluteStartOffset &&
-            matchEnd == absoluteEndOffset
+            matchedStart == absoluteStartOffset &&
+            matchedEnd == absoluteEndOffset
         ) {
             return
         }
@@ -33,25 +38,26 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         let lastMatchingTextNodeIndex = 0
         for (let i = 0; i < serializedTextNodes.length; i++) {
             const [nodeStart, nodeEnd] = serializedTextNodes[i]
-            if (matchStart >= nodeStart && matchStart < nodeEnd) {
+            if (matchedStart >= nodeStart && matchedStart < nodeEnd) {
                 firstMatchingTextNodeIndex = i
             }
-            if (matchEnd > nodeStart && matchEnd <= nodeEnd) {
+            if (matchedEnd > nodeStart && matchedEnd <= nodeEnd) {
                 lastMatchingTextNodeIndex = i
                 break
             }
         }
         // then we offset the match start ends using the very first text node that contains the selection
-        matchStart -= serializedTextNodes[firstMatchingTextNodeIndex][0]
-        matchEnd -= serializedTextNodes[lastMatchingTextNodeIndex][0]
+        matchedStart -= serializedTextNodes[firstMatchingTextNodeIndex][0]
+        matchedEnd -= serializedTextNodes[lastMatchingTextNodeIndex][0]
 
         // Send the result back to content.js
         chrome.tabs.sendMessage(sender.tab.id, {
             action: 'highlightText',
             firstMatchingTextNodeIndex: firstMatchingTextNodeIndex,
-            lastMatchingTextNodeIndex: lastMatchingTextNodeIndex,
-            matchStart: matchStart,
-            matchEnd: matchEnd,
+            lastMatchingTextNodeIndex,
+            matchedStart,
+            matchedEnd,
+            matchedPattern,
         })
     }
 })

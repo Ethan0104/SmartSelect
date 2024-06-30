@@ -19,21 +19,6 @@ function parseDbClickSelectionGetSerializedTextNodeList(selection) {
 
     const { inlineText, textNodes, initialNodeIndex } =
         getSurroundingInlineTextNodes(textNode)
-    console.log(
-        'in: parseDbClickSelectionGetTextNodeList, inlineText',
-        inlineText
-    )
-    console.log(
-        'in: parseDbClickSelectionGetTextNodeList, textNodes',
-        textNodes.length
-    )
-    for (const node of textNodes) {
-        console.log(node.nodeValue)
-    }
-    console.log(
-        'in: parseDbClickSelectionGetTextNodeList, initialNodeIndex',
-        initialNodeIndex
-    )
 
     // while we have the context, we can also calculate the absolute start and end offsets
     let absoluteStartOffset = 0
@@ -52,16 +37,6 @@ function parseDbClickSelectionGetSerializedTextNodeList(selection) {
         }
     }
     absoluteEndOffset = absoluteStartOffset + (endOffset - startOffset)
-    console.log(
-        'in: parseDbClickSelectionGetTextNodeList, start',
-        startOffset,
-        absoluteStartOffset
-    )
-    console.log(
-        'in: parseDbClickSelectionGetTextNodeList, end',
-        endOffset,
-        absoluteEndOffset
-    )
 
     return { inlineText, textNodes, absoluteStartOffset, absoluteEndOffset }
 }
@@ -100,9 +75,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         const {
             firstMatchingTextNodeIndex,
             lastMatchingTextNodeIndex,
-            matchStart,
-            matchEnd,
+            matchedStart,
+            matchedEnd,
+            matchedPattern,
         } = request
+        console.log('matched ', matchedPattern)
+        console.log('matchedStart ', matchedStart)
+        console.log('matchedEnd ', matchedEnd)
         let selection = window.getSelection()
         selection.removeAllRanges()
 
@@ -115,8 +94,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
         // set up the Range object properly
         const range = document.createRange()
-        range.setStart(textNodesCache[firstMatchingTextNodeIndex], matchStart)
-        range.setEnd(textNodesCache[lastMatchingTextNodeIndex], matchEnd)
+        range.setStart(textNodesCache[firstMatchingTextNodeIndex], matchedStart)
+        range.setEnd(textNodesCache[lastMatchingTextNodeIndex], matchedEnd)
         selection.addRange(range)
 
         // Copy the selected text to the clipboard
