@@ -3,14 +3,18 @@
 import smartTextSelector from './selectorEngine'
 import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './constants'
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(async function (
+    request,
+    sender,
+    sendResponse
+) {
     if (request.action === 'processTextSelection') {
         // find the pattern to be selected in the whole text first (treat the text as one chunk)
         const inlineText = request.inlineText as string
         const serializedTextNodes = request.serializedTextNodes as number[][]
         const absoluteStartOffset = request.absoluteStartOffset as number
         const absoluteEndOffset = request.absoluteEndOffset as number
-        const smartTextSelectorResult = smartTextSelector(
+        const smartTextSelectorResult = await smartTextSelector(
             inlineText,
             absoluteStartOffset,
             absoluteEndOffset

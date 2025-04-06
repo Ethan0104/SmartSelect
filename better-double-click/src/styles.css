@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .smart-select-extension-toast-message {
     position: fixed;
     bottom: 0;

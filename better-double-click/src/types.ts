@@ -1,3 +1,14 @@
-import { HTTPS_LINKS, UUIDS, FILE_PATHS } from './constants'
+import {
+    HTTPS_LINKS,
+    UUIDS,
+    UNIX_FILE_PATHS,
+    WINDOWS_FILE_PATHS,
+    EMAILS,
+} from './constants'
 
-export type MatchTypes = typeof HTTPS_LINKS | typeof UUIDS | typeof FILE_PATHS
+export type MatchTypes =
+    | typeof HTTPS_LINKS
+    | typeof UUIDS
+    | typeof UNIX_FILE_PATHS
+    | typeof WINDOWS_FILE_PATHS
+    | typeof EMAILS
