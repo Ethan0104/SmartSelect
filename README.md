@@ -5,19 +5,19 @@ A Chrome extension that improves the default double-click text selection behavio
 ## Features
 
 -   **Smart Selection**: Double-click to select entire emails, URLs, file paths, and UUIDs in one action
--   **Customizable**: Enable or disable specific pattern recognition via the settings popup
 -   **Time-Saving**: Stop manually dragging to select complex text patterns
+-   **Customizable**: Enable or disable specific pattern recognition via the settings popup
+-   **100% Private**: Your data remains on your own machine.
+
+## Install
+
+[Install for **Free**]() <!-- TODO: Add chrome extension link inside parenthesis -->
 
 ## Use Cases
 
 -   **Developers**: Quickly select file paths, UUIDs or URLs in documentation and code
 -   **Email Users**: Easily grab complete email addresses
 -   **Web Researchers**: Copy entire links with a simple double-click
--   **100% Private**: Your data remains on your own machine.
-
-## Install
-
-[**Chrome** extension]() <!-- TODO: Add chrome extension link inside parenthesis -->
 
 ## How It Works
 
