@@ -6,7 +6,10 @@ export class FilePathSelectorEngine extends SelectorEngineBase {
         super(inlineText, start, end)
 
         this.name = FILE_PATHS
-        // this.regex = /(?:\/|(?:\.\.?)?\/?)(?:[^\/\s]+\/)*(?:[^\/\s]+)/g
-        this.regex = new RegExp('^(/[^/ ]*)+/?$')
+        this.regex = /(?:[\w\-\/]+\/)*[\w\-]+\.\w+/g
+    }
+
+    postProcessMatch() {
+        this.matchedStart = this.start
     }
 }

@@ -2,8 +2,6 @@
 
 import { getSurroundingInlineTextNodes } from './domUtils.js'
 
-let textNodesCache = null
-
 function parseDbClickSelectionGetSerializedTextNodeList(selection) {
     const textNode = selection.anchorNode
     const startOffset = selection.anchorOffset
@@ -54,11 +52,9 @@ document.addEventListener('dblclick', function (event) {
     const selection = window.getSelection()
     const { inlineText, textNodes, absoluteStartOffset, absoluteEndOffset } =
         parseDbClickSelectionGetSerializedTextNodeList(selection)
-    textNodesCache = textNodes
 
     // we need to serialize the text nodes because chrome.runtime.sendMessage does not support sending objects with functions
     const serializedTextNodes = getSerializedTextNodeList(textNodes)
-    console.log('in: dblclick, serializedTextNodes', serializedTextNodes)
 
     // Send data to the background script
     chrome.runtime.sendMessage({
@@ -85,17 +81,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         let selection = window.getSelection()
         selection.removeAllRanges()
 
-        if (!textNodesCache) {
-            textNodesCache =
-                parseDbClickSelectionGetSerializedTextNodeList(
-                    selection
-                ).textNodes
-        }
+        const textNodes =
+            parseDbClickSelectionGetSerializedTextNodeList(selection).textNodes
 
         // set up the Range object properly
         const range = document.createRange()
-        range.setStart(textNodesCache[firstMatchingTextNodeIndex], matchedStart)
-        range.setEnd(textNodesCache[lastMatchingTextNodeIndex], matchedEnd)
+        range.setStart(textNodes[firstMatchingTextNodeIndex], matchedStart)
+        range.setEnd(textNodes[lastMatchingTextNodeIndex], matchedEnd)
         selection.addRange(range)
 
         // Copy the selected text to the clipboard
