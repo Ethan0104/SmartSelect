@@ -33,6 +33,12 @@ const common = {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
+            // Handle TypeScript files
+            {
+                test: /\.(ts|tsx)$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
             // Check for images imported in .js files and
             {
                 test: IMAGE_TYPES,
@@ -63,6 +69,9 @@ const common = {
             filename: '[name].css',
         }),
     ],
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
 }
 
 module.exports = common

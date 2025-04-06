@@ -1,9 +1,15 @@
 'use strict'
 
-import { getSurroundingInlineTextNodes } from './domUtils.js'
+import { getSurroundingInlineTextNodes } from './domUtils'
 
-function parseDbClickSelectionGetSerializedTextNodeList(selection) {
+const parseDbClickSelectionGetSerializedTextNodeList = (
+    selection: Selection
+) => {
     const textNode = selection.anchorNode
+    if (!textNode) {
+        console.error('.anchorNode is null', selection)
+        return
+    }
     const startOffset = selection.anchorOffset
     const endOffset = selection.focusOffset
 
@@ -23,7 +29,7 @@ function parseDbClickSelectionGetSerializedTextNodeList(selection) {
     let absoluteEndOffset = 0
     for (let nodeCounter = 0; nodeCounter < textNodes.length; nodeCounter++) {
         const node = textNodes[nodeCounter]
-        const nodeLength = node.nodeValue.length
+        const nodeLength = node.nodeValue?.length ?? 0
 
         if (nodeCounter < initialNodeIndex) {
             absoluteStartOffset += nodeLength
@@ -39,10 +45,10 @@ function parseDbClickSelectionGetSerializedTextNodeList(selection) {
     return { inlineText, textNodes, absoluteStartOffset, absoluteEndOffset }
 }
 
-function getSerializedTextNodeList(textNodes) {
+const getSerializedTextNodeList = (textNodes: Node[]) => {
     let currentOffset = 0
     return textNodes.map((node) => {
-        const nodeLength = node.nodeValue.length
+        const nodeLength = node.nodeValue?.length ?? 0
         currentOffset += nodeLength
         return [currentOffset - nodeLength, currentOffset]
     })
@@ -50,8 +56,15 @@ function getSerializedTextNodeList(textNodes) {
 
 document.addEventListener('dblclick', function (event) {
     const selection = window.getSelection()
+    if (!selection) {
+        return
+    }
+    const result = parseDbClickSelectionGetSerializedTextNodeList(selection)
+    if (!result) {
+        return
+    }
     const { inlineText, textNodes, absoluteStartOffset, absoluteEndOffset } =
-        parseDbClickSelectionGetSerializedTextNodeList(selection)
+        result
 
     // we need to serialize the text nodes because chrome.runtime.sendMessage does not support sending objects with functions
     const serializedTextNodes = getSerializedTextNodeList(textNodes)
@@ -78,13 +91,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         console.log('matched ', matchedPattern)
         console.log('matchedStart ', matchedStart)
         console.log('matchedEnd ', matchedEnd)
-        let selection = window.getSelection()
-        selection.removeAllRanges()
+        const selection = window.getSelection()
+        if (!selection) {
+            console.error('selection is null', selection)
+            return
+        }
 
         const textNodes =
-            parseDbClickSelectionGetSerializedTextNodeList(selection).textNodes
+            parseDbClickSelectionGetSerializedTextNodeList(selection)?.textNodes
+        if (!textNodes) {
+            console.error('textNodes is null', selection)
+            return
+        }
 
         // set up the Range object properly
+        selection.removeAllRanges()
         const range = document.createRange()
         range.setStart(textNodes[firstMatchingTextNodeIndex], matchedStart)
         range.setEnd(textNodes[lastMatchingTextNodeIndex], matchedEnd)

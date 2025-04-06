@@ -1,4 +1,4 @@
-function isInlineElement(element) {
+const isInlineElement = (element: Node) => {
     const inlineElements = new Set([
         'A',
         'ABBR',
@@ -58,18 +58,24 @@ function isInlineElement(element) {
     return inlineElements.has(element.nodeName)
 }
 
-function forceGetPreviousSibling(node) {
-    return node.previousSibling || forceGetPreviousSibling(node.parentNode)
+const forceGetPreviousSibling = (node: Node): Node | null => {
+    return node.previousSibling || forceGetPreviousSibling(node.parentNode!) // only root node has no parentNode so dont worry about it
 }
 
-function forceGetNextSibling(node) {
-    return node.nextSibling || forceGetNextSibling(node.parentNode)
+const forceGetNextSibling = (node: Node): Node | null => {
+    return node.nextSibling || forceGetNextSibling(node.parentNode!) // only root node has no parentNode so dont worry about it
 }
 
-export function getSurroundingInlineTextNodes(textNode) {
+export const getSurroundingInlineTextNodes = (
+    textNode: Node
+): {
+    inlineText: string
+    textNodes: Node[]
+    initialNodeIndex: number
+} => {
     let inlineText = ''
-    let textNodes = []
-    let node = textNode
+    const textNodes: Node[] = []
+    let node: Node | null = textNode
     let initialNodeIndex = -1 // magical number to keep track of the index of the initial text node
 
     // Traverse backward
@@ -82,6 +88,10 @@ export function getSurroundingInlineTextNodes(textNode) {
             node.nodeType === Node.ELEMENT_NODE &&
             isInlineElement(node)
         ) {
+            if (!node.lastChild) {
+                // sure?
+                break
+            }
             node = node.lastChild
             continue
         } else {
@@ -102,6 +112,10 @@ export function getSurroundingInlineTextNodes(textNode) {
             node.nodeType === Node.ELEMENT_NODE &&
             isInlineElement(node)
         ) {
+            if (!node.firstChild) {
+                // sure?
+                break
+            }
             node = node.firstChild
             continue
         } else {

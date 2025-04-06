@@ -1,27 +1,28 @@
 'use strict'
 
-import { smartTextSelector } from './selectorEngine/patternMatcher.js'
-import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './selectorEngine/constants.js'
+import smartTextSelector from './selectorEngine'
+import { SKIP_IF_NO_CHANGE_IN_SELECTION } from './constants'
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'processTextSelection') {
         // find the pattern to be selected in the whole text first (treat the text as one chunk)
-        const {
-            inlineText,
-            serializedTextNodes,
-            absoluteStartOffset,
-            absoluteEndOffset,
-        } = request
-        let { matchedStart, matchedEnd, matchedPattern } = smartTextSelector(
+        const inlineText = request.inlineText as string
+        const serializedTextNodes = request.serializedTextNodes as number[][]
+        const absoluteStartOffset = request.absoluteStartOffset as number
+        const absoluteEndOffset = request.absoluteEndOffset as number
+        const smartTextSelectorResult = smartTextSelector(
             inlineText,
             absoluteStartOffset,
             absoluteEndOffset
         )
 
         // if no pattern is found, return
-        if (!matchedPattern) {
+        if (!smartTextSelectorResult) {
             return
         }
+
+        let { matchedStart, matchedEnd, matchedPattern } =
+            smartTextSelectorResult
 
         // check if the selection is the same as the previous selection
         if (
@@ -51,6 +52,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         matchedEnd -= serializedTextNodes[lastMatchingTextNodeIndex][0]
 
         // Send the result back to content.js
+        if (!sender.tab?.id) {
+            console.error('sender.tab.id is null', sender)
+            return
+        }
         chrome.tabs.sendMessage(sender.tab.id, {
             action: 'highlightText',
             firstMatchingTextNodeIndex: firstMatchingTextNodeIndex,

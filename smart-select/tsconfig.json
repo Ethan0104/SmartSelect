@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "sourceMap": true,
+        "declaration": false,
+        "removeComments": true,
+        "jsx": "react",
+        "allowJs": true,
+        "outDir": "build",
+        "rootDir": "src",
+        "baseUrl": ".",
+        "paths": {
+            "*": ["src/*"]
+        },
+        "lib": ["dom", "dom.iterable", "esnext"]
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+    "exclude": ["node_modules", "build"]
+}
