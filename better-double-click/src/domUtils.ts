@@ -59,11 +59,29 @@ const isInlineElement = (element: Node) => {
 }
 
 const forceGetPreviousSibling = (node: Node): Node | null => {
-    return node.previousSibling || forceGetPreviousSibling(node.parentNode!) // only root node has no parentNode so dont worry about it
+    const previousSibling = node.previousSibling
+    if (previousSibling) {
+        return previousSibling
+    }
+
+    const parentNode = node.parentNode
+    if (!parentNode) {
+        return null
+    }
+    return forceGetPreviousSibling(parentNode)
 }
 
 const forceGetNextSibling = (node: Node): Node | null => {
-    return node.nextSibling || forceGetNextSibling(node.parentNode!) // only root node has no parentNode so dont worry about it
+    const nextSibling = node.nextSibling
+    if (nextSibling) {
+        return nextSibling
+    }
+
+    const parentNode = node.parentNode
+    if (!parentNode) {
+        return null
+    }
+    return forceGetNextSibling(parentNode)
 }
 
 export const getSurroundingInlineTextNodes = (
