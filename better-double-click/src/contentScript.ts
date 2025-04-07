@@ -126,14 +126,56 @@ document.addEventListener('dblclick', async function (event) {
     // we need to serialize the text nodes because chrome.runtime.sendMessage does not support sending objects with functions
     const serializedTextNodes = getSerializedTextNodeList(textNodes)
 
-    // Send data to the background script
-    chrome.runtime.sendMessage({
-        action: 'processTextSelection',
-        inlineText: inlineText,
-        serializedTextNodes: serializedTextNodes,
-        absoluteStartOffset: absoluteStartOffset,
-        absoluteEndOffset: absoluteEndOffset,
-    })
+    const smartTextSelectorResult = await smartTextSelector(
+        inlineText,
+        absoluteStartOffset,
+        absoluteEndOffset
+    )
+
+    // if no pattern is found, return
+    if (!smartTextSelectorResult) {
+        return
+    }
+
+    let { matchedStart, matchedEnd, matchedPattern } = smartTextSelectorResult
+
+    // check if the selection is the same as the previous selection
+    if (
+        SKIP_IF_NO_CHANGE_IN_SELECTION &&
+        matchedStart == absoluteStartOffset &&
+        matchedEnd == absoluteEndOffset
+    ) {
+        return
+    }
+
+    // Find the text nodes that contain the selection
+    // but first we need to find the very first and last text node that contains the selection and record them
+    let firstMatchingTextNodeIndex = 0
+    let lastMatchingTextNodeIndex = 0
+    for (let i = 0; i < serializedTextNodes.length; i++) {
+        const [nodeStart, nodeEnd] = serializedTextNodes[i]
+        if (matchedStart >= nodeStart && matchedStart < nodeEnd) {
+            firstMatchingTextNodeIndex = i
+        }
+        if (matchedEnd > nodeStart && matchedEnd <= nodeEnd) {
+            lastMatchingTextNodeIndex = i
+            break
+        }
+    }
+    // then we offset the match start ends using the very first text node that contains the selection
+    matchedStart -= serializedTextNodes[firstMatchingTextNodeIndex][0]
+    matchedEnd -= serializedTextNodes[lastMatchingTextNodeIndex][0]
+
+    console.log('matched ', matchedPattern)
+    console.log('matchedStart ', matchedStart)
+    console.log('matchedEnd ', matchedEnd)
+
+    // set up the Range object properly
+    selection.removeAllRanges()
+    const range = document.createRange()
+    range.setStart(textNodes[firstMatchingTextNodeIndex], matchedStart)
+    range.setEnd(textNodes[lastMatchingTextNodeIndex], matchedEnd)
+    selection.addRange(range)
 })
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
