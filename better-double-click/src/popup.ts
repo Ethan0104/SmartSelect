@@ -1,4 +1,6 @@
-'use strict'
+// Import the CSS file for webpack to process it
+import './popup.css'
+;('use strict')
 ;(function () {
     // Settings storage interface with type safety
     interface Settings {
@@ -63,9 +65,6 @@
             chrome.storage.sync.set(data, () => {
                 if (callback) callback()
             })
-
-            // Notify content scripts about the updated setting
-            notifyContentScriptForSetting(key, value)
         },
 
         // Initialize settings with defaults if they don't exist yet
@@ -141,26 +140,6 @@
                 }
                 if (uuidsCheckbox) {
                     uuidsCheckbox.checked = settings.enableUuids
-                }
-            })
-        })
-    }
-
-    // Notify all active tabs' content scripts about a specific updated setting
-    function notifyContentScriptForSetting<K extends keyof Settings>(
-        key: K,
-        value: Settings[K]
-    ): void {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            tabs.forEach((tab) => {
-                if (tab.id) {
-                    chrome.tabs.sendMessage(tab.id, {
-                        type: 'SETTING_UPDATED',
-                        payload: {
-                            key,
-                            value,
-                        },
-                    })
                 }
             })
         })

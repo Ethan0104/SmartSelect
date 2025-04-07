@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Better Double Click",
+    "name": "Better Double Click Select",
     "version": "0.1.0",
     "description": "A chrome extension that improves double-click-to-select behavior to select different text patterns, beyond just words.",
     "icons": {
@@ -10,7 +10,7 @@
         "128": "icons/logo128x128.png"
     },
     "action": {
-        "default_title": "Better Double Click",
+        "default_title": "Better Double Click Select",
         "default_popup": "popup.html"
     },
     "permissions": ["storage"],

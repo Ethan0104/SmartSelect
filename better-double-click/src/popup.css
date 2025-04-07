@@ -15,7 +15,9 @@ html {
 }
 
 body {
-    width: 350px;
+    /* Removing fixed width to allow Tailwind classes to work */
+    /* width: 350px; */
+    min-width: 320px; /* Ensure minimum width */
     height: 300px;
 }
 

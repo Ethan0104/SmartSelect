@@ -1,4 +1,4 @@
-# <img src="better-double-click/public/icons/logo_original.png" width="45" align="left"> Better Double Click
+# <img src="better-double-click/public/icons/logo_original.png" width="45" align="left"> Better Double Click Select
 
 A Chrome extension that improves the default double-click text selection behavior to intelligently select common text patterns beyond just words.
 
@@ -21,7 +21,7 @@ A Chrome extension that improves the default double-click text selection behavio
 
 ## How It Works
 
-When you double-click on text, Better Double Click analyzes the surrounding content to detect if the text is part of a larger pattern (like an email address or URL). If detected, it automatically expands the selection to include the entire pattern.
+When you double-click on text, Better Double Click Select analyzes the surrounding content to detect if the text is part of a larger pattern (like an email address or URL). If detected, it automatically expands the selection to include the entire pattern.
 
 ## Contribution
 
