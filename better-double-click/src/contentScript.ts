@@ -177,37 +177,3 @@ document.addEventListener('dblclick', async function (event) {
     range.setEnd(textNodes[lastMatchingTextNodeIndex], matchedEnd)
     selection.addRange(range)
 })
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.action === 'highlightText') {
-        const {
-            firstMatchingTextNodeIndex,
-            lastMatchingTextNodeIndex,
-            matchedStart,
-            matchedEnd,
-            matchedPattern,
-        } = request
-        console.log('matched ', matchedPattern)
-        console.log('matchedStart ', matchedStart)
-        console.log('matchedEnd ', matchedEnd)
-        const selection = window.getSelection()
-        if (!selection) {
-            console.error('selection is null', selection)
-            return
-        }
-
-        const textNodes =
-            parseDbClickSelectionGetSerializedTextNodeList(selection)?.textNodes
-        if (!textNodes) {
-            console.error('textNodes is null', selection)
-            return
-        }
-
-        // set up the Range object properly
-        selection.removeAllRanges()
-        const range = document.createRange()
-        range.setStart(textNodes[firstMatchingTextNodeIndex], matchedStart)
-        range.setEnd(textNodes[lastMatchingTextNodeIndex], matchedEnd)
-        selection.addRange(range)
-    }
-})

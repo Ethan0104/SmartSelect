@@ -9,9 +9,6 @@
         "48": "icons/logo48x48.png",
         "128": "icons/logo128x128.png"
     },
-    "background": {
-        "service_worker": "background.js"
-    },
     "action": {
         "default_title": "Better Double Click",
         "default_popup": "popup.html"
