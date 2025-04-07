@@ -19,8 +19,6 @@ const parseDbClickSelectionGetSerializedTextNodeList = (
     if (textNode.nodeType === Node.TEXT_NODE) {
         const startOffset = selection.anchorOffset
         const endOffset = selection.focusOffset
-        console.log('startOffset', startOffset)
-        console.log('endOffset', endOffset)
 
         const { inlineText, textNodes, initialNodeIndex } =
             getSurroundingInlineTextNodes(textNode)
@@ -74,12 +72,10 @@ document.addEventListener('dblclick', async function (event) {
         event.target instanceof HTMLInputElement ||
         event.target instanceof HTMLTextAreaElement
     ) {
-        console.log('early return for input or textarea')
         const element = event.target as HTMLInputElement | HTMLTextAreaElement
         const start = element.selectionStart
         const end = element.selectionEnd
         if (start === null || end === null) {
-            console.error('start or end is null', start, end)
             return
         }
         const inlineText = element.value
@@ -165,10 +161,6 @@ document.addEventListener('dblclick', async function (event) {
     // then we offset the match start ends using the very first text node that contains the selection
     matchedStart -= serializedTextNodes[firstMatchingTextNodeIndex][0]
     matchedEnd -= serializedTextNodes[lastMatchingTextNodeIndex][0]
-
-    console.log('matched ', matchedPattern)
-    console.log('matchedStart ', matchedStart)
-    console.log('matchedEnd ', matchedEnd)
 
     // set up the Range object properly
     selection.removeAllRanges()

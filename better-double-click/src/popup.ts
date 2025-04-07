@@ -28,7 +28,6 @@
                     'enableUuids',
                 ],
                 (result) => {
-                    console.log('Retrieved settings:', result)
                     // Merge with defaults for any missing values
                     const settings: Settings = {
                         enableEmails:
@@ -61,9 +60,7 @@
         ): void => {
             const data: Partial<Record<keyof Settings, any>> = {}
             data[key] = value
-            console.log(`Saving setting: ${String(key)} = ${value}`)
             chrome.storage.sync.set(data, () => {
-                console.log(`Saved setting: ${String(key)} = ${value}`)
                 if (callback) callback()
             })
 
@@ -103,7 +100,6 @@
                     }
 
                     if (needsUpdate) {
-                        console.log('Initializing default settings:', updates)
                         chrome.storage.sync.set(
                             updates,
                             callback ? callback : () => {}
@@ -134,29 +130,16 @@
     function initializeUI(): void {
         settingsStorage.initializeDefaults(() => {
             settingsStorage.getAll((settings) => {
-                console.log('Initializing UI with settings:', settings)
                 if (emailsCheckbox) {
-                    console.log(
-                        `Setting emailsCheckbox to: ${settings.enableEmails}`
-                    )
                     emailsCheckbox.checked = settings.enableEmails
                 }
                 if (linksCheckbox) {
-                    console.log(
-                        `Setting linksCheckbox to: ${settings.enableLinks}`
-                    )
                     linksCheckbox.checked = settings.enableLinks
                 }
                 if (filePathsCheckbox) {
-                    console.log(
-                        `Setting filePathsCheckbox to: ${settings.enableFilePaths}`
-                    )
                     filePathsCheckbox.checked = settings.enableFilePaths
                 }
                 if (uuidsCheckbox) {
-                    console.log(
-                        `Setting uuidsCheckbox to: ${settings.enableUuids}`
-                    )
                     uuidsCheckbox.checked = settings.enableUuids
                 }
             })
@@ -216,7 +199,6 @@
 
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM content loaded, initializing popup')
         initializeUI()
         setupEventListeners()
     })
