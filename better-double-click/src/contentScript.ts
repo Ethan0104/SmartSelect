@@ -169,3 +169,5 @@ document.addEventListener('dblclick', async function (event) {
     range.setEnd(textNodes[lastMatchingTextNodeIndex], matchedEnd)
     selection.addRange(range)
 })
+
+console.log('Better Double Click Select loaded')
