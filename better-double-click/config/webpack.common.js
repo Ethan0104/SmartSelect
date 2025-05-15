@@ -65,6 +65,9 @@ const common = {
                 {
                     from: '**/*',
                     context: 'public',
+                    globOptions: {
+                        ignore: ['**/icons/logo_original.png'],
+                    },
                 },
             ],
         }),
