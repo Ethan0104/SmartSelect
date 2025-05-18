@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +17,6 @@ export default function Navbar() {
   }, []);
 
   const scrollToSection = (id: string) => {
-    setIsMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       const offsetTop =
@@ -76,43 +74,7 @@ export default function Navbar() {
               FAQ
             </button>
           </nav>
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
         </div>
-
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden pt-4 pb-2">
-            <div className="flex flex-col space-y-4">
-              <button
-                onClick={() => scrollToSection('home')}
-                className="text-gray-300 hover:text-primary transition-colors py-2"
-              >
-                Home
-              </button>
-              <button
-                onClick={() => scrollToSection('features')}
-                className="text-gray-300 hover:text-primary transition-colors py-2"
-              >
-                Features
-              </button>
-              <button
-                onClick={() => scrollToSection('faq')}
-                className="text-gray-300 hover:text-primary transition-colors py-2"
-              >
-                FAQ
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </header>
   );

@@ -44,14 +44,7 @@ export default function HeroArrowGraphic() {
         </div>
 
         {/* Label - positioned along the path */}
-        <div
-          className="absolute bg-none px-2 py-0.5 text-xs text-primary font-medium whitespace-nowrap z-10"
-          style={{
-            top: '110px',
-            left: '30vw',
-            transform: 'translateX(-50%)',
-          }}
-        >
+        <div className="absolute top-[110px] left-[60vw] md:left-[30vw] transform -translate-x-1/2 bg-none px-2 py-0.5 text-xs text-primary font-medium whitespace-nowrap z-10">
           a single double click
         </div>
       </div>
