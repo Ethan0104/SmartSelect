@@ -1,4 +1,6 @@
 import { Code, FileText, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function AudienceSection() {
   const audiences = [
@@ -54,12 +56,18 @@ export default function AudienceSection() {
             No matter your profession, if you work with text, our extension will
             save you time and frustration.
           </p>
-          <a
-            href="#download"
-            className="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-300"
+          <Link
+            href="https://chromewebstore.google.com/detail/better-double-click-selec/nhkmlbajieenacopoepocpoiiancolgb?utm_source=website&utm_medium=footer&utm_campaign=landing"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Try SmartSelect Free
-          </a>
+            <Button
+              size="lg"
+              className="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-300"
+            >
+              Get it for free
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
